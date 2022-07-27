@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/categories/men_category.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 import 'package:multi_store_app/widgets/fake_search.dart';
 
@@ -22,11 +23,28 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  final PageController _pageController = PageController(
+    initialPage: 0,
+    keepPage: true,
+  );
+  @override
+  void initState() {
+    for (var element in items) {
+      element.isSelected = false;
+    }
+    setState(() {
+      items[0].isSelected = true;
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
           title: const FakeSearch(),
         ),
         body: Stack(
@@ -48,12 +66,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
           itemBuilder: ((context, index) {
             return GestureDetector(
               onTap: () {
-                for (var element in items) {
-                  element.isSelected = false;
-                }
-                setState(() {
-                  items[index].isSelected = true;
-                });
+                _pageController.animateToPage(index,
+                    duration: Duration(milliseconds: 100), curve: Curves.bounceIn);
               },
               child: Container(
                 height: 100,
@@ -72,7 +86,37 @@ class _CategoryScreenState extends State<CategoryScreen> {
       height: size.height * 0.8,
       width: size.width * 0.8,
       color: Colors.white,
+      child: PageView(
+        controller: _pageController,
+        onPageChanged: (value) {
+          for (var element in items) {
+            element.isSelected = false;
+          }
+          setState(() {
+            items[value].isSelected = true;
+          });
+        },
+        scrollDirection: Axis.vertical,
+        children: const [
+          MenCategory(),
+          Center(child: Text("Women category")),
+          Center(child: Text("shoes category")),
+          Center(child: Text("bags category")),
+          Center(child: Text("electronics category")),
+          Center(child: Text("accessories category")),
+          Center(child: Text("home & garden category")),
+          Center(child: Text("kids category")),
+          Center(child: Text("beauty category")),
+        ],
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _pageController.dispose();
   }
 }
 
