@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:multi_store_app/categories/categ_widgets.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import 'categ_widgets.dart';
-
-class MenCategory extends StatelessWidget {
-  const MenCategory({Key? key}) : super(key: key);
+class HomeGardenCategory extends StatelessWidget {
+  const HomeGardenCategory({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class MenCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategoryHeaderLabel(
-                    headerLabel: "Men",
+                    headerLabel: "Home & Garden",
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -31,12 +32,12 @@ class MenCategory extends StatelessWidget {
                       mainAxisSpacing: 70,
                       crossAxisSpacing: 15,
                       children: List.generate(
-                        men.length,
+                        homeandgarden.length,
                         (index) => SubCategoryModel(
-                          mainCategoryName: 'men',
-                          subCategoryName: men[index],
-                          assertName: 'images/men/men$index.jpg',
-                          SubCategoryLabel: men[index],
+                          mainCategoryName: 'Home & Garden',
+                          subCategoryName: women[index],
+                          assertName: 'images/homegarden/home$index.jpg',
+                          SubCategoryLabel: women[index],
                         ),
                       ),
                     ),
@@ -49,7 +50,7 @@ class MenCategory extends StatelessWidget {
               bottom: 0,
               right: 0,
               child: SliderBar(
-                mainCategoryName: "men",
+                mainCategoryName: "garden & home",
               ))
         ],
       ),

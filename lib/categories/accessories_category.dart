@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/categories/categ_widgets.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import 'categ_widgets.dart';
-
-class MenCategory extends StatelessWidget {
-  const MenCategory({Key? key}) : super(key: key);
+class AccessoriesCategory extends StatelessWidget {
+  const AccessoriesCategory({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class MenCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategoryHeaderLabel(
-                    headerLabel: "Men",
+                    headerLabel: "Accessories",
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -31,12 +30,12 @@ class MenCategory extends StatelessWidget {
                       mainAxisSpacing: 70,
                       crossAxisSpacing: 15,
                       children: List.generate(
-                        men.length,
+                        accessories.length,
                         (index) => SubCategoryModel(
-                          mainCategoryName: 'men',
-                          subCategoryName: men[index],
-                          assertName: 'images/men/men$index.jpg',
-                          SubCategoryLabel: men[index],
+                          mainCategoryName: 'accessories',
+                          subCategoryName: accessories[index],
+                          assertName: 'images/accessories/accessories$index.jpg',
+                          SubCategoryLabel: accessories[index],
                         ),
                       ),
                     ),
@@ -49,7 +48,7 @@ class MenCategory extends StatelessWidget {
               bottom: 0,
               right: 0,
               child: SliderBar(
-                mainCategoryName: "men",
+                mainCategoryName: "accessories",
               ))
         ],
       ),
