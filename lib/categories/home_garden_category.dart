@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:multi_store_app/categories/categ_widgets.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 

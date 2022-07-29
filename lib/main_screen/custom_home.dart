@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/main_screen/category.dart';
 import 'package:multi_store_app/main_screen/home.dart';
+import 'package:multi_store_app/main_screen/store.dart';
 
 class CustomHomeScreen extends StatefulWidget {
   const CustomHomeScreen({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _CustomHomeScreenState extends State<CustomHomeScreen> {
   final List<Widget> _tabs = const [
     HomeScreen(),
     CategoryScreen(),
-    Center(child: Text("Store Screen")),
+    StoreScreen(),
     Center(
       child: Text("Cart Screen"),
     ),
