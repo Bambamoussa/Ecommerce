@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/main_screen/cart.dart';
 import 'package:multi_store_app/main_screen/category.dart';
 import 'package:multi_store_app/main_screen/home.dart';
+import 'package:multi_store_app/main_screen/profile.dart';
 import 'package:multi_store_app/main_screen/store.dart';
 
 class CustomHomeScreen extends StatefulWidget {
@@ -18,9 +19,7 @@ class _CustomHomeScreenState extends State<CustomHomeScreen> {
     CategoryScreen(),
     StoreScreen(),
     CartScreen(),
-    Center(
-      child: Text("Profil Screen"),
-    )
+    ProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {
