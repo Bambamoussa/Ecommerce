@@ -134,22 +134,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                         subtitle: "exemple@gmail.com",
                         icon: Icons.email,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40.0),
-                        child: Divider(
-                          color: Colors.yellow,
-                          thickness: 1,
-                        ),
-                      ),
+                      YellowDivider(),
                       RepeatListTitle(
                           title: "Phone Number", subtitle: "+1 2356789", icon: Icons.phone),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40.0),
-                        child: Divider(
-                          color: Colors.yellow,
-                          thickness: 1,
-                        ),
-                      ),
+                      YellowDivider(),
                       RepeatListTitle(
                           title: "Address",
                           subtitle: "70 rue du luxembourg",
@@ -171,27 +159,15 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     children: [
                       RepeatListTitle(
                           title: "Edit profil", subtitle: "", icon: Icons.edit, onPressed: () {}),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40.0),
-                        child: Divider(
-                          color: Colors.yellow,
-                          thickness: 1,
-                        ),
-                      ),
+                      const YellowDivider(),
                       RepeatListTitle(
-                          title: "Phone Number", subtitle: "", icon: Icons.phone, onPressed: () {}),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40.0),
-                        child: Divider(
-                          color: Colors.yellow,
-                          thickness: 1,
-                        ),
-                      ),
-                      RepeatListTitle(
-                          title: "Address",
+                          title: "change Password",
                           subtitle: "",
-                          icon: Icons.location_on,
+                          icon: Icons.lock,
                           onPressed: () {}),
+                      const YellowDivider(),
+                      RepeatListTitle(
+                          title: "log out", subtitle: "", icon: Icons.logout, onPressed: () {}),
                     ],
                   ),
                 ),
@@ -199,6 +175,23 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             ]),
           )
         ],
+      ),
+    );
+  }
+}
+
+class YellowDivider extends StatelessWidget {
+  const YellowDivider({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 40.0),
+      child: Divider(
+        color: Colors.yellow,
+        thickness: 1,
       ),
     );
   }
