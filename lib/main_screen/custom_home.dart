@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/main_screen/cart.dart';
 import 'package:multi_store_app/main_screen/category.dart';
 import 'package:multi_store_app/main_screen/home.dart';
 import 'package:multi_store_app/main_screen/store.dart';
@@ -16,9 +17,7 @@ class _CustomHomeScreenState extends State<CustomHomeScreen> {
     HomeScreen(),
     CategoryScreen(),
     StoreScreen(),
-    Center(
-      child: Text("Cart Screen"),
-    ),
+    CartScreen(),
     Center(
       child: Text("Profil Screen"),
     )
