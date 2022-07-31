@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/main_screen/custom_home.dart';
+import 'package:multi_store_app/main_screen/supplier_home.dart';
+import 'package:multi_store_app/main_screen/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: CustomHomeScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
