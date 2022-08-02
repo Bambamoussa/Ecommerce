@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/dashboard_components/edit_business.dart';
+import 'package:multi_store_app/dashboard_components/manage_products.dart';
+import 'package:multi_store_app/dashboard_components/my_store.dart';
+import 'package:multi_store_app/dashboard_components/statics.dart';
+import 'package:multi_store_app/dashboard_components/supli_orders.dart';
+import 'package:multi_store_app/dashboard_components/suppli_balance.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
 class DashBoardScreen extends StatelessWidget {
@@ -29,13 +35,24 @@ class DashBoardScreen extends StatelessWidget {
         icon: Icons.show_chart,
       ),
     ];
+
+    List<Widget> pages = const [
+      MyStoreScreen(),
+      SuppliOrdersScreen(),
+      EditBusinessScreen(),
+      ManageProductsScreen(),
+      BalanceScreen(),
+      StaticsScreen(),
+    ];
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: const AppBarTitle(title: "Dashboard"),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, "/welcome_screen");
+              },
               icon: const Icon(Icons.logout, color: Colors.black),
             ),
           ],
@@ -47,22 +64,37 @@ class DashBoardScreen extends StatelessWidget {
             mainAxisSpacing: 50,
             crossAxisSpacing: 50,
             children: List.generate(_dashboardItems.length, (index) {
-              return Card(
-                elevation: 20,
-                shadowColor: Colors.purpleAccent.shade200,
-                color: Colors.blueGrey.withOpacity(0.7),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Icon(_dashboardItems[index].icon, color: Colors.yellowAccent, size: 50),
-                    Text(_dashboardItems[index].label.toUpperCase(),
-                        style: const TextStyle(
-                            fontSize: 24,
-                            color: Colors.yellowAccent,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 2,
-                            fontFamily: "Acme")),
-                  ],
+              return InkWell(
+                onTap: (() {
+                  Navigator.pushNamed(context, "welcome_home");
+                }),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => pages[index],
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 20,
+                    shadowColor: Colors.purpleAccent.shade200,
+                    color: Colors.blueGrey.withOpacity(0.7),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(_dashboardItems[index].icon, color: Colors.yellowAccent, size: 50),
+                        Text(_dashboardItems[index].label.toUpperCase(),
+                            style: const TextStyle(
+                                fontSize: 24,
+                                color: Colors.yellowAccent,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 2,
+                                fontFamily: "Acme")),
+                      ],
+                    ),
+                  ),
                 ),
               );
             }),

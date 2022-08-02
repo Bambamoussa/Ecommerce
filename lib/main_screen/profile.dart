@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/customers_screen/customer_orders.dart';
+import 'package:multi_store_app/customers_screen/whislist.dart';
+import 'package:multi_store_app/main_screen/cart.dart';
+import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -91,7 +95,16 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                       topLeft: Radius.circular(30),
                                       bottomLeft: Radius.circular(30))),
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const CartScreen(
+                                        backButton: AppBarBackButton(),
+                                      ),
+                                    ),
+                                  );
+                                },
                                 child: SizedBox(
                                   height: 40,
                                   width: MediaQuery.of(context).size.width * 0.2,
@@ -108,7 +121,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                 color: Colors.yellow,
                               ),
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const CustomerOrders(),
+                                    ),
+                                  );
+                                },
                                 child: SizedBox(
                                   height: 40,
                                   width: MediaQuery.of(context).size.width * 0.2,
@@ -127,7 +147,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                       topRight: Radius.circular(30),
                                       bottomRight: Radius.circular(30))),
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const WhisListScreen(),
+                                    ),
+                                  );
+                                },
                                 child: SizedBox(
                                   height: 40,
                                   width: MediaQuery.of(context).size.width * 0.2,
@@ -206,7 +233,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                     title: "log out",
                                     subtitle: "",
                                     icon: Icons.logout,
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      Navigator.pushReplacementNamed(context, "/welcome_screen");
+                                    }),
                               ],
                             ),
                           ),
@@ -245,7 +274,7 @@ class RepeatListTitle extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
-  final Function? onPressed;
+  final Function()? onPressed;
   const RepeatListTitle({
     Key? key,
     required this.title,
@@ -257,7 +286,7 @@ class RepeatListTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onPressed,
       child: ListTile(
         title: Text(title),
         subtitle: Text(subtitle),

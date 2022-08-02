@@ -1,8 +1,42 @@
+import 'dart:math';
+
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/main_screen/supplier_home.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  List<Color> textColors = [
+    Colors.blueAccent,
+    Colors.yellowAccent,
+    Colors.red,
+    Colors.green,
+    Colors.purple,
+    Colors.teal
+  ];
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+    _controller.repeat();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +48,22 @@ class WelcomeScreen extends StatelessWidget {
         constraints: const BoxConstraints.expand(),
         child: SafeArea(
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const Text("Welcome",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
+            AnimatedTextKit(
+              animatedTexts: [
+                ColorizeAnimatedText("WELCOME",
+                    colors: textColors,
+                    textStyle: const TextStyle(
+                        fontSize: 50, fontWeight: FontWeight.bold, fontFamily: "Acme")),
+                ColorizeAnimatedText("DUCKS STORE",
+                    colors: textColors,
+                    textStyle: const TextStyle(
+                        fontSize: 50, fontWeight: FontWeight.bold, fontFamily: "Acme"))
+              ],
+              isRepeatingAnimation: true,
+              repeatForever: true,
+            ),
+            // const Text("Welcome",
+            //     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
             const SizedBox(
               height: 120,
               width: 200,
@@ -54,8 +102,13 @@ class WelcomeScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Image(image: AssetImage("images/inapp/logo.jpg")),
-                          YellowButton(label: "log In", onPressed: () {}, width: 0.25),
+                          AnimatedLogo(controller: _controller),
+                          YellowButton(
+                              label: "log In",
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(context, "/supplier_screen");
+                              },
+                              width: 0.25),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: YellowButton(label: "Sign Up", onPressed: () {}, width: 0.25),
@@ -85,10 +138,15 @@ class WelcomeScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
-                        child: YellowButton(label: "log In", onPressed: () {}, width: 0.25),
+                        child: YellowButton(
+                            label: "log In",
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(context, "/customer_screen");
+                            },
+                            width: 0.25),
                       ),
                       YellowButton(label: "Sign Up", onPressed: () {}, width: 0.25),
-                      const Image(image: AssetImage("images/inapp/logo.jpg")),
+                      AnimatedLogo(controller: _controller),
                     ],
                   ),
                 ),
@@ -128,6 +186,27 @@ class WelcomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AnimatedLogo extends StatelessWidget {
+  const AnimatedLogo({
+    Key? key,
+    required AnimationController controller,
+  })  : _controller = controller,
+        super(key: key);
+
+  final AnimationController _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: _controller.view,
+        builder: (context, child) => Transform.rotate(
+              angle: _controller.value * 2.0 * pi,
+              child: child,
+            ),
+        child: const Image(image: AssetImage("images/inapp/logo.jpg")));
   }
 }
 
