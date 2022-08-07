@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/customers_screen/customer_orders.dart';
 import 'package:multi_store_app/customers_screen/whislist.dart';
 import 'package:multi_store_app/main_screen/cart.dart';
+import 'package:multi_store_app/widgets/alert_dialog.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -233,8 +235,20 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                     title: "log out",
                                     subtitle: "",
                                     icon: Icons.logout,
-                                    onPressed: () {
-                                      Navigator.pushReplacementNamed(context, "/welcome_screen");
+                                    onPressed: () async {
+                                      MyAlertDialog.showDialog(
+                                          context: context,
+                                          title: "Log out",
+                                          content: "Are you sure you want to log out?",
+                                          tabNo: () {
+                                            Navigator.pop(context);
+                                          },
+                                          tabYes: () async {
+                                            await FirebaseAuth.instance.signOut();
+                                            Navigator.pop(context);
+                                            Navigator.pushReplacementNamed(
+                                                context, "/welcome_screen");
+                                          });
                                     }),
                               ],
                             ),
