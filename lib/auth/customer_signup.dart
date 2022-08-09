@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/widgets/auth_widgets.dart';
@@ -16,6 +19,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   XFile? _imageFile;
   dynamic _pickImageError;
   final ImagePicker _imagePicker = ImagePicker();
+  CollectionReference customers = FirebaseFirestore.instance.collection('customers');
   void _pickerImageCamera() async {
     try {
       final pickerImage = await _imagePicker.pickImage(
@@ -53,6 +57,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   late String name;
   late String email;
   late String password;
+  late String profileImage;
+  late String _uid;
+  bool processing = false;
   bool passwordVisible = false;
   @override
   Widget build(BuildContext context) {
@@ -73,7 +80,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                           child: CircleAvatar(
                               radius: 50,
                               backgroundColor: Colors.purpleAccent,
@@ -186,24 +193,14 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       actionLabel: "Sign in",
                       onPressed: () {},
                     ),
-                    AuthMainButton(
-                      mainButtonLabel: "Sign up",
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          if (_imageFile != null) {
-                            print("valid");
-                            _formKey.currentState!.reset();
-                            setState(() {
-                              _imageFile = null;
-                            });
-                          } else {
-                            MessengerHandler.showSnackBar(_scaffoldKey, "Please pick image fields");
-                          }
-                        } else {
-                          MessengerHandler.showSnackBar(_scaffoldKey, "Please fill all the fields");
-                        }
-                      },
-                    ),
+                    processing == true
+                        ? const CircularProgressIndicator()
+                        : AuthMainButton(
+                            mainButtonLabel: "Sign up",
+                            onPressed: () {
+                              signUp();
+                            },
+                          ),
                   ],
                 ),
               ),
@@ -212,6 +209,65 @@ class _CustomerRegisterState extends State<CustomerRegister> {
         ),
       ),
     );
+  }
+
+  void signUp() async {
+    setState(() {
+      processing = true;
+    });
+    if (_formKey.currentState!.validate()) {
+      if (_imageFile != null) {
+        try {
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
+
+          var ref = FirebaseStorage.instance.ref("cust-images/${_emailController.text}.jpg");
+          await ref.putFile(File(_imageFile!.path));
+          profileImage = await ref.getDownloadURL();
+          _uid = FirebaseAuth.instance.currentUser!.uid;
+          await customers.doc(_uid).set({
+            'name': _nameController.text,
+            'email': _emailController.text,
+            'profileImage': profileImage,
+            'phone': '',
+            'address': '',
+            'cid': _uid
+          });
+          _formKey.currentState!.reset();
+          setState(() {
+            _imageFile = null;
+          });
+          Navigator.pushReplacementNamed(context, "/customer_screen");
+        } on FirebaseAuthException catch (e) {
+          setState(() {
+            processing = false;
+          });
+          if (e.code == 'weak-password') {
+            setState(() {
+              processing = false;
+            });
+            MessengerHandler.showSnackBar(_scaffoldKey, "The password provided is too weak.");
+          } else if (e.code == 'email-already-in-use') {
+            setState(() {
+              processing = false;
+            });
+            MessengerHandler.showSnackBar(
+                _scaffoldKey, "The account already exists for that email.");
+          }
+        }
+      } else {
+        setState(() {
+          processing = false;
+        });
+
+        MessengerHandler.showSnackBar(_scaffoldKey, "Please pick image fields");
+      }
+    } else {
+      setState(() {
+        processing = false;
+      });
+      MessengerHandler.showSnackBar(_scaffoldKey, "Please fill all the fields");
+    }
   }
 }
 
