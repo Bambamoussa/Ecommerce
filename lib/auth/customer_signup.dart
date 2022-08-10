@@ -9,7 +9,7 @@ import 'package:multi_store_app/widgets/auth_widgets.dart';
 import 'package:multi_store_app/widgets/snackbar.dart';
 
 class CustomerRegister extends StatefulWidget {
-  CustomerRegister({Key? key}) : super(key: key);
+  const CustomerRegister({Key? key}) : super(key: key);
 
   @override
   State<CustomerRegister> createState() => _CustomerRegisterState();
@@ -191,7 +191,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                     HaveAccount(
                       haveAccount: "already have an account ?",
                       actionLabel: "Sign in",
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/customer_login');
+                      },
                     ),
                     processing == true
                         ? const CircularProgressIndicator()
