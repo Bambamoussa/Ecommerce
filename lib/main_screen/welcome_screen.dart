@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,9 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
+  CollectionReference customers = FirebaseFirestore.instance.collection('customers');
   late AnimationController _controller;
+  late String _uid;
   List<Color> textColors = [
     Colors.blueAccent,
     Colors.yellowAccent,
@@ -109,12 +112,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                           YellowButton(
                               label: "log In",
                               onPressed: () {
-                                Navigator.pushReplacementNamed(context, "/supplier_screen");
+                                Navigator.pushReplacementNamed(context, "/supplier_login");
                               },
                               width: 0.25),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: YellowButton(label: "Sign Up", onPressed: () {}, width: 0.25),
+                            child: YellowButton(
+                                label: "Sign Up",
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(context, "/supplier_signup");
+                                },
+                                width: 0.25),
                           ),
                         ],
                       ),
@@ -186,7 +194,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                                 setState(() {
                                   pressing = true;
                                 });
-                                await FirebaseAuth.instance.signInAnonymously();
+                                await FirebaseAuth.instance
+                                    .signInAnonymously()
+                                    .whenComplete(() async {
+                                  _uid = FirebaseAuth.instance.currentUser!.uid;
+                                  await customers.doc(_uid).set({
+                                    'storename': '',
+                                    'email': '',
+                                    'storelogo': '',
+                                    'coverimage': '',
+                                    'phone': '',
+                                    'cid': _uid
+                                  });
+                                });
+
                                 Navigator.pushReplacementNamed(context, '/customer_screen');
                               },
                               child: const Icon(

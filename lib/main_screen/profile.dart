@@ -84,12 +84,20 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                   padding: const EdgeInsets.only(left: 30, top: 25),
                                   child: Row(
                                     children: [
-                                      CircleAvatar(
-                                        backgroundImage: NetworkImage(data["profileImage"]),
-                                        radius: 50,
-                                      ),
+                                      data["profileImage"] == ""
+                                          ? const CircleAvatar(
+                                              backgroundImage: AssetImage("images/inapp/guest.png"),
+                                              radius: 50,
+                                            )
+                                          : CircleAvatar(
+                                              backgroundImage: NetworkImage(data["profileImage"]),
+                                              radius: 50,
+                                            ),
                                       const SizedBox(width: 20),
-                                      Text(data["name"].toUpperCase(),
+                                      Text(
+                                          data["name"] == ""
+                                              ? "Guest".toUpperCase()
+                                              : data["name"].toUpperCase(),
                                           style: const TextStyle(
                                               fontSize: 24, fontWeight: FontWeight.w600)),
                                     ],
@@ -210,18 +218,24 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                   child: Column(
                                     children: [
                                       RepeatListTitle(
-                                        title: data["email"],
+                                        title: data["email"] == " "
+                                            ? "exemple@gmail;com"
+                                            : data["email"],
                                         subtitle: "exemple@gmail.com",
                                         icon: Icons.email,
                                       ),
                                       const YellowDivider(),
                                       RepeatListTitle(
-                                          title: data["phone"],
+                                          title: data["phone"] == " "
+                                              ? "exemple: +111111"
+                                              : data["phone"],
                                           subtitle: "+1 2356789",
                                           icon: Icons.phone),
                                       const YellowDivider(),
                                       RepeatListTitle(
-                                          title: data["address"],
+                                          title: data["adress"]
+                                              ? " exemple: 70 rue du luxembourg Roubaix"
+                                              : data["address"],
                                           subtitle: "70 rue du luxembourg",
                                           icon: Icons.location_on),
                                     ],
