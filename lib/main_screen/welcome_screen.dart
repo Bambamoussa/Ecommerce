@@ -200,10 +200,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                                   _uid = FirebaseAuth.instance.currentUser!.uid;
                                   await customers.doc(_uid).set({
                                     'storename': '',
+                                    'name': '',
                                     'email': '',
                                     'storelogo': '',
                                     'coverimage': '',
+                                    'profileImage': '',
                                     'phone': '',
+                                    'address': '',
                                     'cid': _uid
                                   });
                                 });

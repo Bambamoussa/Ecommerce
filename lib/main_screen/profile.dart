@@ -86,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                     children: [
                                       data["profileImage"] == ""
                                           ? const CircleAvatar(
-                                              backgroundImage: AssetImage("images/inapp/guest.png"),
+                                              backgroundImage: AssetImage("images/inapp/guest.jpg"),
                                               radius: 50,
                                             )
                                           : CircleAvatar(
@@ -218,22 +218,22 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                   child: Column(
                                     children: [
                                       RepeatListTitle(
-                                        title: data["email"] == " "
-                                            ? "exemple@gmail;com"
+                                        title: data["email"] == ""
+                                            ? "exemple@gmail.com"
                                             : data["email"],
                                         subtitle: "exemple@gmail.com",
                                         icon: Icons.email,
                                       ),
                                       const YellowDivider(),
                                       RepeatListTitle(
-                                          title: data["phone"] == " "
+                                          title: data["phone"] == ""
                                               ? "exemple: +111111"
                                               : data["phone"],
                                           subtitle: "+1 2356789",
                                           icon: Icons.phone),
                                       const YellowDivider(),
                                       RepeatListTitle(
-                                          title: data["adress"]
+                                          title: data["address"] == ""
                                               ? " exemple: 70 rue du luxembourg Roubaix"
                                               : data["address"],
                                           subtitle: "70 rue du luxembourg",
