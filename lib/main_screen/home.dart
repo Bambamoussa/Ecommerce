@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/galleries/kids_gallery.dart';
+import 'package:multi_store_app/galleries/men_gallery.dart';
+import 'package:multi_store_app/galleries/shoes_gallery.dart';
+import 'package:multi_store_app/galleries/women_gallery.dart';
 import 'package:multi_store_app/widgets/fake_search.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return DefaultTabController(
         length: 9,
         child: Scaffold(
+          backgroundColor: Colors.blueGrey.shade100.withOpacity(0.5),
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.white,
@@ -36,15 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           body: const TabBarView(children: [
-            Center(
-              child: Text("Men Screen"),
-            ),
-            Center(
-              child: Text("WoMen Screen"),
-            ),
-            Center(
-              child: Text("Shoes Screen"),
-            ),
+            MenGalleryScreen(),
+            WomenGalleryScreen(),
+            ShoesGalleryScreen(),
             Center(
               child: Text("Bags Screen"),
             ),
@@ -57,9 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: Text("Home & Garden Screen"),
             ),
-            Center(
-              child: Text("Kids Screen"),
-            ),
+            KidsGalleryScreen(),
             Center(
               child: Text("Beauty Screen"),
             ),

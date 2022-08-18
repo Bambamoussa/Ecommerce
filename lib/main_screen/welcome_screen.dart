@@ -3,9 +3,7 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/main_screen/supplier_home.dart';
 import 'package:multi_store_app/widgets/yellow_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -16,7 +14,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
-  CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+  CollectionReference anonymous = FirebaseFirestore.instance.collection('anonymous');
   late AnimationController _controller;
   late String _uid;
   List<Color> textColors = [
@@ -198,7 +196,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                                     .signInAnonymously()
                                     .whenComplete(() async {
                                   _uid = FirebaseAuth.instance.currentUser!.uid;
-                                  await customers.doc(_uid).set({
+                                  await anonymous.doc(_uid).set({
                                     'storename': '',
                                     'name': '',
                                     'email': '',

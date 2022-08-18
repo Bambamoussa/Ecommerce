@@ -192,7 +192,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       haveAccount: "already have an account ?",
                       actionLabel: "Sign in",
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/customer_login');
+                        Navigator.pushReplacementNamed(context, '/supplier_login');
                       },
                     ),
                     processing == true

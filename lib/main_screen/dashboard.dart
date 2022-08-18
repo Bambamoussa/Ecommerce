@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/dashboard_components/edit_business.dart';
 import 'package:multi_store_app/dashboard_components/manage_products.dart';
-import 'package:multi_store_app/dashboard_components/my_store.dart';
 import 'package:multi_store_app/dashboard_components/statics.dart';
 import 'package:multi_store_app/dashboard_components/supli_orders.dart';
 import 'package:multi_store_app/dashboard_components/suppli_balance.dart';
+import 'package:multi_store_app/minor_screen/visit_store.dart';
 import 'package:multi_store_app/widgets/alert_dialog.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 
@@ -38,13 +38,13 @@ class DashBoardScreen extends StatelessWidget {
       ),
     ];
 
-    List<Widget> pages = const [
-      MyStoreScreen(),
-      SuppliOrdersScreen(),
-      EditBusinessScreen(),
-      ManageProductsScreen(),
-      BalanceScreen(),
-      StaticsScreen(),
+    List<Widget> pages = [
+      VisitStore(suppId: FirebaseAuth.instance.currentUser!.uid),
+      const SuppliOrdersScreen(),
+      const EditBusinessScreen(),
+      const ManageProductsScreen(),
+      const BalanceScreen(),
+      const StaticsScreen(),
     ];
     return Scaffold(
         appBar: AppBar(
