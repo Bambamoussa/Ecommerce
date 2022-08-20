@@ -192,7 +192,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       haveAccount: "already have an account ?",
                       actionLabel: "Sign in",
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/supplier_login');
+                        Navigator.pushReplacementNamed(context, '/customer_login');
                       },
                     ),
                     processing == true
@@ -241,6 +241,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           });
           Navigator.pushReplacementNamed(context, "/customer_screen");
         } on FirebaseAuthException catch (e) {
+          print("fffffffffff");
           setState(() {
             processing = false;
           });
