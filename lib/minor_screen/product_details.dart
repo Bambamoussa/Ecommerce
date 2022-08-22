@@ -34,6 +34,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   @override
   Widget build(BuildContext context) {
+    final getItemexist = context.read<Cart>().getItems.firstWhereOrNull(
+          (element) => element!.documentId == widget.productList["proid"],
+        );
+
     final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
         .collection('products')
         .where("maintecategory", isEqualTo: widget.productList["maintecategory"])
@@ -165,10 +169,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ))
                     ],
                   ),
-                  Text(
-                    "${widget.productList["instock"]} pieces available in stock ",
-                    style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
-                  ),
+                  widget.productList["instock"] == 0
+                      ? const Text(
+                          "this item is out of stock",
+                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        )
+                      : Text(
+                          "${widget.productList["instock"]} pieces available in stock ",
+                          style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
+                        ),
                   const ProductDetailsHeader(
                     label: "  Item Description  ",
                   ),
@@ -264,21 +273,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   YellowButton(
                       label: "ADD TO CART",
                       onPressed: () {
-                        final cart = context.read<Cart>();
-                        final getItem = cart.getItems;
-                        getItem.firstWhereOrNull(
-                                  (element) => element!.documentId == widget.productList["proid"],
-                                ) !=
-                                null
-                            ? MessengerHandler.showSnackBar(_scaffoldKey, "Product already in cart")
-                            : context.read<Cart>().addItem(
-                                widget.productList["productname"],
-                                widget.productList["price"],
-                                1,
-                                widget.productList["instock"],
-                                widget.productList["proimage"],
-                                widget.productList["proid"],
-                                widget.productList["sid"]);
+                        if (widget.productList["instock"] == 0) {
+                          MessengerHandler.showSnackBar(
+                              _scaffoldKey, " the Product is out in stock ");
+                        } else if (getItemexist != null) {
+                          MessengerHandler.showSnackBar(_scaffoldKey, "Product already in cart");
+                        } else {
+                          context.read<Cart>().addItem(
+                              widget.productList["productname"],
+                              widget.productList["price"],
+                              1,
+                              widget.productList["instock"],
+                              widget.productList["proimage"],
+                              widget.productList["proid"],
+                              widget.productList["sid"]);
+                        }
                       },
                       width: 0.5)
                 ],
