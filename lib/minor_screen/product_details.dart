@@ -34,12 +34,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   @override
   Widget build(BuildContext context) {
+    var onSale = widget.productList['discount'];
+
+    String calculPrice() {
+      var calcul = (1 - (widget.productList["discount"] / 100)) * widget.productList["price"];
+      return calcul.toStringAsFixed(2);
+    }
+
     final getItemexist = context.read<Cart>().getItems.firstWhereOrNull(
           (element) => element!.documentId == widget.productList["proid"],
         );
 
-    final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
-        .collection('products')
+    final Stream<QuerySnapshot> _productListStream = FirebaseFirestore.instance
+        .collection('productList')
         .where("maintecategory", isEqualTo: widget.productList["maintecategory"])
         .where("subcategory", isEqualTo: widget.productList["subcategory"])
         .snapshots();
@@ -122,16 +129,41 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         children: [
                           Row(
                             children: [
-                              const Text(
-                                "USD",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w600, color: Colors.red),
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                widget.productList['price'].toStringAsFixed(2),
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w600, color: Colors.red),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "USD ",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.red),
+                                  ),
+                                  Text(
+                                    widget.productList['price'].toStringAsFixed(2),
+                                    style: onSale != 0
+                                        ? const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey,
+                                            decoration: TextDecoration.lineThrough)
+                                        : const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.red),
+                                  ),
+                                  const SizedBox(
+                                    width: 6,
+                                  ),
+                                  onSale != 0
+                                      ? Text(
+                                          calculPrice(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.red),
+                                        )
+                                      : const Text(" ")
+                                ],
                               ),
                             ],
                           ),
@@ -144,7 +176,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ? context.read<Wish>().removeThis(widget.productList["proid"])
                                 : context.read<Wish>().addWishItem(
                                     widget.productList["productname"],
-                                    widget.productList["price"],
+                                    onSale != 0
+                                        ? onSale != 0
+                                            ? (1 - (widget.productList["discount"] / 100)) *
+                                                widget.productList["price"]
+                                            : widget.productList["price"]
+                                        : widget.productList["price"],
                                     1,
                                     widget.productList["instock"],
                                     widget.productList["proimage"],
@@ -192,7 +229,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                   SizedBox(
                     child: StreamBuilder<QuerySnapshot>(
-                      stream: _productsStream,
+                      stream: _productListStream,
                       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasError) {
                           return const Text('Something went wrong');
@@ -281,7 +318,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         } else {
                           context.read<Cart>().addItem(
                               widget.productList["productname"],
-                              widget.productList["price"],
+                              onSale != 0
+                                  ? (1 - (widget.productList["discount"] / 100)) *
+                                      widget.productList["price"]
+                                  : widget.productList["price"],
                               1,
                               widget.productList["instock"],
                               widget.productList["proimage"],

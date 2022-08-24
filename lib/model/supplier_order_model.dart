@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class SupplierOrderModel extends StatelessWidget {
   final dynamic orders;
@@ -129,8 +131,33 @@ class SupplierOrderModel extends StatelessWidget {
                                 style: TextStyle(fontSize: 15),
                               ),
                               orders["deliverystatus"] == 'preparing'
-                                  ? TextButton(onPressed: () {}, child: const Text("shipping ?"))
-                                  : TextButton(onPressed: () {}, child: const Text("delivery ?"))
+                                  ? TextButton(
+                                      onPressed: () {
+                                        DatePicker.showDatePicker(context,
+                                            minTime: DateTime.now(),
+                                            maxTime: DateTime.now().add(
+                                              const Duration(days: 365),
+                                            ), onConfirm: (date) async {
+                                          await FirebaseFirestore.instance
+                                              .collection("orders")
+                                              .doc(orders["orderid"])
+                                              .update({
+                                            "deliverystatus": "shipping",
+                                            "deliverydate": date
+                                          });
+                                        });
+                                      },
+                                      child: const Text("shipping ?"))
+                                  : TextButton(
+                                      onPressed: () async {
+                                        await FirebaseFirestore.instance
+                                            .collection("orders")
+                                            .doc(orders["orderid"])
+                                            .update({
+                                          "deliverystatus": "delivered",
+                                        });
+                                      },
+                                      child: const Text("delivery ?"))
                             ],
                           )
                   ],
