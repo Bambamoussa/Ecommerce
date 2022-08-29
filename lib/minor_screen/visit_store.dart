@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:multi_store_app/minor_screen/edit_store.dart';
 import 'package:multi_store_app/model/product_model.dart';
 import 'package:multi_store_app/widgets/appbar_widgets.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
@@ -89,7 +90,14 @@ class _VisitStoreState extends State<VisitStore> {
                                   valueListenable: following,
                                   builder: (context, value, child) {
                                     return MaterialButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => EditStore(
+                                                        data: data,
+                                                      )));
+                                        },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: const [
@@ -140,10 +148,15 @@ class _VisitStoreState extends State<VisitStore> {
                 ],
               ),
               toolbarHeight: 100,
-              flexibleSpace: Image.asset(
-                "images/inapp/coverimage.jpg",
-                fit: BoxFit.cover,
-              ),
+              flexibleSpace: data["coverimage"] == ""
+                  ? Image.asset(
+                      "images/inapp/coverimage.jpg",
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      data["coverimage"],
+                      fit: BoxFit.cover,
+                    ),
             ),
             body: StreamBuilder<QuerySnapshot>(
               stream: _productsStream,

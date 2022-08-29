@@ -1,6 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:multi_store_app/main_screen/cart.dart';
 import 'package:multi_store_app/minor_screen/full_screen.dart';
@@ -46,10 +48,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         );
 
     final Stream<QuerySnapshot> _productListStream = FirebaseFirestore.instance
-        .collection('productList')
+        .collection('products')
         .where("maintecategory", isEqualTo: widget.productList["maintecategory"])
         .where("subcategory", isEqualTo: widget.productList["subcategory"])
         .snapshots();
+
+    final Stream<QuerySnapshot> reviewStream = FirebaseFirestore.instance
+        .collection('products')
+        .doc(widget.productList["proid"])
+        .collection("reviews")
+        .snapshots();
+
     ValueNotifier buttonIcon = ValueNotifier(null);
 
     return Material(
@@ -224,6 +233,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     style: TextStyle(
                         fontSize: 20, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
                   ),
+                  Stack(
+                    children: [
+                      const Positioned(
+                        child: Text("total"),
+                        right: 50,
+                        top: 15,
+                      ),
+                      ExpandableTheme(
+                          data: const ExpandableThemeData(
+                            iconSize: 30,
+                            iconColor: Colors.blue,
+                          ),
+                          child: Review(reviewStream)),
+                    ],
+                  ),
                   const ProductDetailsHeader(
                     label: "  Similar Items  ",
                   ),
@@ -377,4 +401,71 @@ class ProductDetailsHeader extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget Review(reviewStream) {
+  return ExpandablePanel(
+      header: const Padding(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          "Review",
+          style: TextStyle(color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+      collapsed: SizedBox(height: 200, child: ReviewAll(reviewStream)),
+      expanded: ReviewAll(reviewStream));
+}
+
+Widget ReviewAll(reviewsStream) {
+  return StreamBuilder<QuerySnapshot>(
+    stream: reviewsStream,
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot2) {
+      if (snapshot2.hasError) {
+        return const Text('Something went wrong');
+      }
+
+      if (snapshot2.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (snapshot2.data!.docs.isEmpty) {
+        return const Center(
+          child: Text(
+            'this item \n \n has no reviews yet',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Acme", letterSpacing: 1.5),
+          ),
+        );
+      }
+
+      return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: snapshot2.data!.docs.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: snapshot2.data!.docs[index]["profileimage"] == null
+                    ? null
+                    : NetworkImage(snapshot2.data!.docs[index]["profileimage"]),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(snapshot2.data!.docs[index]["name"] ?? "anonymous"),
+                  Row(
+                    children: [
+                      Text(snapshot2.data!.docs[index]["rate"].toString()),
+                      const Icon(Icons.star, color: Colors.yellow),
+                    ],
+                  ),
+                ],
+              ),
+              subtitle: Text(snapshot2.data!.docs[index]["review"]),
+            );
+          });
+    },
+  );
 }
