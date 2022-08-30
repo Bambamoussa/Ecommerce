@@ -15,7 +15,11 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({Key? key}) : super(key: key);
+  final String name;
+  final String phone;
+  final String address;
+  const PaymentScreen({Key? key, required this.name, required this.phone, required this.address})
+      : super(key: key);
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -230,10 +234,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                       orderId = const Uuid().v4();
                                                       await collectionReference.doc(orderId).set({
                                                         "cid": data["cid"],
-                                                        "custname": data["custname"],
+                                                        "custname": widget.name,
                                                         "email": data["email"],
-                                                        "adress": data["adress"],
-                                                        "phone": data["phone"],
+                                                        "adress": widget.address,
+                                                        "phone": widget.phone,
                                                         "profileimage": data["profileimage"],
                                                         "sid": item.suppId,
                                                         "proname": item.name,
@@ -324,10 +328,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
         orderId = const Uuid().v4();
         await collectionReference.doc(orderId).set({
           "cid": data["cid"],
-          "custname": data["custname"],
+          "custname": widget.name,
           "email": data["email"],
-          "adress": data["adress"],
-          "phone": data["phone"],
+          "adress": widget.address,
+          "phone": widget.phone,
           "profileimage": data["profileimage"],
           "sid": item.suppId,
           "proname": item.name,

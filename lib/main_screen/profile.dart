@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/customers_screen/add_address.dart';
+import 'package:multi_store_app/customers_screen/address_book.dart';
 import 'package:multi_store_app/customers_screen/customer_orders.dart';
 import 'package:multi_store_app/customers_screen/whislist.dart';
 import 'package:multi_store_app/main_screen/cart.dart';
@@ -236,10 +238,20 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                           icon: Icons.phone),
                                       const YellowDivider(),
                                       RepeatListTitle(
+                                          onPressed: FirebaseAuth.instance.currentUser!.isAnonymous
+                                              ? null
+                                              : () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => const AddressBook(),
+                                                    ),
+                                                  );
+                                                },
                                           title: data["address"] == ""
-                                              ? " exemple: 70 rue du luxembourg Roubaix"
+                                              ? " set your address"
                                               : data["address"],
-                                          subtitle: "70 rue du luxembourg",
+                                          subtitle: userAdress(data) /* "70 rue du luxembourg",*/,
                                           icon: Icons.location_on),
                                     ],
                                   ),
@@ -309,6 +321,16 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         ));
       },
     );
+  }
+
+  String userAdress(dynamic data) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      return "exemple: 70 rue du luxembourg Roubaix";
+    } else if (!FirebaseAuth.instance.currentUser!.isAnonymous && data["address"] == "") {
+      return "Set your adress";
+    } else {
+      return "70 rue du luxembourg";
+    }
   }
 }
 
