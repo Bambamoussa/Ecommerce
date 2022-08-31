@@ -150,7 +150,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                         child: YellowButton(
                             label: "log In",
                             onPressed: () {
-                              Navigator.pushReplacementNamed(context, "/customer_screen");
+                              Navigator.pushReplacementNamed(context, "/customer_login");
                             },
                             width: 0.25),
                       ),
