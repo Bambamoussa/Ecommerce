@@ -17,15 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       
        
-            Navigator.pop(context);
-          },
-        ),
-        title: CupertinoSearchTextField(
-          autofocus: true,
-          backgroundColor: Colors.white,
-          onChanged: (value) {
-            setState(() {
-              searchInput = value;
+         
             });
           },
         ),
