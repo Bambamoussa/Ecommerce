@@ -15,7 +15,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColorer: Colors.grey.shade300,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey.shade300,
@@ -41,25 +41,30 @@ class _SearchScreenState extends State<SearchScreen> {
       body: searchInput == ''
           ? Center(
               child: Container(
-                decoration:
-                    BoxDecoration(color: Colors.yellow, borderRadius: BorderRadius.circular(25)),
+                decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(25)),
                 height: 30,
                 width: MediaQuery.of(context).size.width * 0.7,
-                child: Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Icon(Icons.search, color: Colors.grey),
-                  ),
-                  Text(
-                    'Search for any thing ..',
-                    style: TextStyle(color: Colors.grey),
-                  )
-                ]),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Icon(Icons.search, color: Colors.grey),
+                      ),
+                      Text(
+                        'Search for any thing ..',
+                        style: TextStyle(color: Colors.grey),
+                      )
+                    ]),
               ),
             )
           : StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('products').snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              stream:
+                  FirebaseFirestore.instance.collection('products').snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Material(
                     child: Center(
@@ -69,7 +74,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
 
                 final result = snapshot.data!.docs.where(
-                  (e) => e['productname'.toLowerCase()].contains(searchInput.toLowerCase()),
+                  (e) => e['productname'.toLowerCase()]
+                      .contains(searchInput.toLowerCase()),
                 );
 
                 return ListView(
@@ -89,12 +95,15 @@ class SearchModel extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(productList: e)));
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetailsScreen(productList: e)));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
           height: 100,
           width: double.infinity,
           child: Padding(
@@ -123,7 +132,9 @@ class SearchModel extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: const TextStyle(
-                            fontSize: 14, color: Colors.black, fontWeight: FontWeight.w600),
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600),
                       ),
                       Text(
                         e['productdescription'],
