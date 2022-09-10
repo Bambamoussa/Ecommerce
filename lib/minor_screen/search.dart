@@ -11,28 +11,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String searchInput = '';
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      
-       
-            Navigator.pop(context);
-          },
-        ),
-        title: CupertinoSearchTextField(
-          autofocus: true,
-          backgroundColor: Colors.white,
-          onChanged: (value) {
-            setState(() {
-              searchInput = value;
-            });
-          },
-        ),
-      ),
-      body: searchInput == ''
-          ? Center(
-              child: Container(
+  S ild: Container(
                 decoration: BoxDecoration(
                     color: Colors.yellow,
                     borderRadius: BorderRadius.circular(25)),
