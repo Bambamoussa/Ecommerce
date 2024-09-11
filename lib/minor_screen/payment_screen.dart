@@ -15,14 +15,15 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({Key? key}) : super(key: key);
+  const PaymentScreen({super.key});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  CollectionReference customers = FirebaseFirestore.instance.collection('customers');
+  CollectionReference customers =
+      FirebaseFirestore.instance.collection('customers');
 
   late double totalPrice = context.watch<Cart>().totalPrice;
   late double totalPaid = context.watch<Cart>().totalPrice + 10.0;
@@ -31,14 +32,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   void showProgress() {
     ProgressDialog progress = ProgressDialog(context: context);
-    progress.show(max: 100, msg: "please wait ...", progressBgColor: Colors.red);
+    progress.show(
+        max: 100, msg: "please wait ...", progressBgColor: Colors.red);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
         future: customers.doc(FirebaseAuth.instance.currentUser!.uid).get(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return const Text("Something went wrong");
           }
@@ -52,7 +55,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
 
             return Material(
               color: Colors.grey.shade200,
@@ -80,10 +84,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text("Total",
                                           style: TextStyle(
@@ -98,7 +104,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                     thickness: 2,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text("Total Order",
                                           style: TextStyle(
@@ -108,14 +115,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           style: const TextStyle(fontSize: 16)),
                                     ],
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: const [
+                                  const Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
                                       Text("Shipping Coast",
                                           style: TextStyle(
                                             fontSize: 16,
                                           )),
-                                      Text("10.0", style: TextStyle(fontSize: 16)),
+                                      Text("10.0",
+                                          style: TextStyle(fontSize: 16)),
                                     ],
                                   ),
                                 ]),
@@ -151,9 +160,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       selectedValue = value!;
                                     });
                                   },
-                                  title: const Text("Pay via Visa/ Master Card"),
-                                  subtitle: Row(
-                                    children: const [
+                                  title:
+                                      const Text("Pay via Visa/ Master Card"),
+                                  subtitle: const Row(
+                                    children: [
                                       Icon(
                                         Icons.payment,
                                         color: Colors.blue,
@@ -181,13 +191,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       });
                                     },
                                     title: const Text("Pay via Paypal"),
-                                    subtitle: Row(
-                                      children: const [
-                                        Icon(FontAwesomeIcons.paypal, color: Colors.blue),
+                                    subtitle: const Row(
+                                      children: [
+                                        Icon(FontAwesomeIcons.paypal,
+                                            color: Colors.blue),
                                         SizedBox(
                                           width: 15,
                                         ),
-                                        Icon(FontAwesomeIcons.ccPaypal, color: Colors.blue),
+                                        Icon(FontAwesomeIcons.ccPaypal,
+                                            color: Colors.blue),
                                       ],
                                     )),
                               ],
@@ -209,66 +221,104 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               showModalBottomSheet(
                                   context: context,
                                   builder: (context) => SizedBox(
-                                        height: MediaQuery.of(context).size.height * 0.3,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.3,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 100),
+                                          padding: const EdgeInsets.only(
+                                              bottom: 100),
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
                                             children: [
-                                              Text("Pay at home ${totalPaid.toStringAsFixed(2)} \$",
+                                              Text(
+                                                  "Pay at home ${totalPaid.toStringAsFixed(2)} \$",
                                                   style: const TextStyle(
-                                                      fontSize: 20, fontWeight: FontWeight.bold)),
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
                                               YellowButton(
                                                   label: "CONFIRM",
                                                   onPressed: () async {
                                                     showProgress();
-                                                    for (var item
-                                                        in context.read<Cart>().getItems) {
-                                                      CollectionReference collectionReference =
-                                                          FirebaseFirestore.instance
-                                                              .collection("orders");
-                                                      orderId = const Uuid().v4();
-                                                      await collectionReference.doc(orderId).set({
+                                                    for (var item in context
+                                                        .read<Cart>()
+                                                        .getItems) {
+                                                      CollectionReference
+                                                          collectionReference =
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  "orders");
+                                                      orderId =
+                                                          const Uuid().v4();
+                                                      await collectionReference
+                                                          .doc(orderId)
+                                                          .set({
                                                         "cid": data["cid"],
-                                                        "custname": data["custname"],
+                                                        "custname":
+                                                            data["custname"],
                                                         "email": data["email"],
-                                                        "adress": data["adress"],
+                                                        "adress":
+                                                            data["adress"],
                                                         "phone": data["phone"],
-                                                        "profileimage": data["profileimage"],
+                                                        "profileimage": data[
+                                                            "profileimage"],
                                                         "sid": item.suppId,
                                                         "proname": item.name,
-                                                        "proid": item.documentId,
+                                                        "proid":
+                                                            item.documentId,
                                                         "orderid": orderId,
                                                         "ordername": item.name,
-                                                        "orderimage": item.imagesUrl.first,
+                                                        "orderimage": item
+                                                            .imagesUrl.first,
                                                         "orderqty": item.qty,
-                                                        "orderprice": item.price,
-                                                        "deliverystatus": "preparing",
+                                                        "orderprice":
+                                                            item.price,
+                                                        "deliverystatus":
+                                                            "preparing",
                                                         "deliverydate": "",
-                                                        "orderdate": DateTime.now(),
-                                                        "paymentstatus": "cash on delivery",
+                                                        "orderdate":
+                                                            DateTime.now(),
+                                                        "paymentstatus":
+                                                            "cash on delivery",
                                                         "orderreview": false
                                                       }).whenComplete(() async {
-                                                        await FirebaseFirestore.instance
-                                                            .runTransaction((transaction) async {
-                                                          DocumentReference documentReference =
-                                                              FirebaseFirestore.instance
-                                                                  .collection("products")
-                                                                  .doc(item.documentId);
-                                                          DocumentSnapshot snapshot2 =
-                                                              await transaction
-                                                                  .get(documentReference);
-                                                          transaction.update(documentReference, {
-                                                            "instock":
-                                                                snapshot2["instock"] - item.qty
-                                                          });
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .runTransaction(
+                                                                (transaction) async {
+                                                          DocumentReference
+                                                              documentReference =
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      "products")
+                                                                  .doc(item
+                                                                      .documentId);
+                                                          DocumentSnapshot
+                                                              snapshot2 =
+                                                              await transaction.get(
+                                                                  documentReference);
+                                                          transaction.update(
+                                                              documentReference,
+                                                              {
+                                                                "instock":
+                                                                    snapshot2[
+                                                                            "instock"] -
+                                                                        item.qty
+                                                              });
                                                         });
                                                       });
                                                     }
 
-                                                    context.read<Cart>().clearCart();
-                                                    Navigator.popUntil(context,
-                                                        ModalRoute.withName('/customer_screen'));
+                                                    context
+                                                        .read<Cart>()
+                                                        .clearCart();
+                                                    Navigator.popUntil(
+                                                        context,
+                                                        ModalRoute.withName(
+                                                            '/customer_screen'));
                                                   },
                                                   width: 0.8)
                                             ],
@@ -307,6 +357,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       final paymentData = await createPaymentIntent(total);
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
+              customFlow: true,
               paymentIntentClientSecret: paymentData["client_secret"],
               applePay: const PaymentSheetApplePay(
                 merchantCountryCode: 'CIV',
@@ -320,7 +371,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       await displayPaymentSheet(paymentData!["client_secret"]);
       showProgress();
       for (var item in context.read<Cart>().getItems) {
-        CollectionReference collectionReference = FirebaseFirestore.instance.collection("orders");
+        CollectionReference collectionReference =
+            FirebaseFirestore.instance.collection("orders");
         orderId = const Uuid().v4();
         await collectionReference.doc(orderId).set({
           "cid": data["cid"],
@@ -344,10 +396,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
           "orderreview": false
         }).whenComplete(() async {
           await FirebaseFirestore.instance.runTransaction((transaction) async {
-            DocumentReference documentReference =
-                FirebaseFirestore.instance.collection("products").doc(item.documentId);
-            DocumentSnapshot snapshot2 = await transaction.get(documentReference);
-            transaction.update(documentReference, {"instock": snapshot2["instock"] - item.qty});
+            DocumentReference documentReference = FirebaseFirestore.instance
+                .collection("products")
+                .doc(item.documentId);
+            DocumentSnapshot snapshot2 =
+                await transaction.get(documentReference);
+            transaction.update(documentReference,
+                {"instock": snapshot2["instock"] - item.qty});
           });
         });
       }
@@ -365,7 +420,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       "currency": "USD",
       "payment_method_types[0]": "card",
     };
-    final response = await http.post(Uri.parse("https://api.stripe.com/v1/payment_intents"),
+    final response = await http.post(
+        Uri.parse("https://api.stripe.com/v1/payment_intents"),
         body: body,
         headers: {
           "Authorization": "Bearer $stripeSecretKey",
@@ -377,9 +433,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   displayPaymentSheet(clientSecret) async {
     try {
-      await Stripe.instance.presentPaymentSheet(
-        parameters: PresentPaymentSheetParameters(clientSecret: clientSecret, confirmPayment: true),
-      );
+      await Stripe.instance.presentPaymentSheet();
+      await Stripe.instance.confirmPaymentSheetPayment();
     } catch (e) {
       print({"errrrrrrrrrrrrrrrrrrrr$e"});
     }

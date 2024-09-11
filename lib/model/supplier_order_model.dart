@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import "package:intl/intl.dart";
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class SupplierOrderModel extends StatelessWidget {
   final dynamic orders;
-  const SupplierOrderModel({Key? key, required this.orders}) : super(key: key);
+  const SupplierOrderModel({super.key, required this.orders});
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,15 @@ class SupplierOrderModel extends StatelessWidget {
         ),
         child: ExpansionTile(
           title: Container(
-            constraints: const BoxConstraints(maxHeight: 80, maxWidth: double.infinity),
+            constraints:
+                const BoxConstraints(maxHeight: 80, maxWidth: double.infinity),
             child: Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(13.0),
                   child: Container(
-                    constraints: const BoxConstraints(maxHeight: 80, maxWidth: 80),
+                    constraints:
+                        const BoxConstraints(maxHeight: 80, maxWidth: 80),
                     child: Image.network(orders["orderimage"]),
                   ),
                 ),
@@ -38,15 +40,20 @@ class SupplierOrderModel extends StatelessWidget {
                       orders["proname"],
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                      style:
+                          TextStyle(fontSize: 12, color: Colors.grey.shade600),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text(("\$") + (orders["orderprice"].toStringAsFixed(2))),
-                        Text(" x  ${orders["orderqty"].toString()}",
-                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600))
-                      ]),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(("\$") +
+                                (orders["orderprice"].toStringAsFixed(2))),
+                            Text(" x  ${orders["orderqty"].toString()}",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey.shade600))
+                          ]),
                     )
                   ],
                 ))
@@ -55,13 +62,17 @@ class SupplierOrderModel extends StatelessWidget {
           ),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [const Text("See More ..."), Text(orders["deliverystatus"])],
+            children: [
+              const Text("See More ..."),
+              Text(orders["deliverystatus"])
+            ],
           ),
           children: [
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.yellow.withOpacity(0.2), borderRadius: BorderRadius.circular(15)),
+                  color: Colors.yellow.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(15)),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -91,7 +102,8 @@ class SupplierOrderModel extends StatelessWidget {
                         ),
                         Text(
                           " ${orders["paymentstatus"]}",
-                          style: const TextStyle(fontSize: 15, color: Colors.purple),
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.purple),
                         ),
                       ],
                     ),
@@ -103,7 +115,8 @@ class SupplierOrderModel extends StatelessWidget {
                         ),
                         Text(
                           "  ${orders["deliverystatus"]}",
-                          style: const TextStyle(fontSize: 15, color: Colors.green),
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.green),
                         ),
                       ],
                     ),
@@ -114,8 +127,11 @@ class SupplierOrderModel extends StatelessWidget {
                           style: TextStyle(fontSize: 15),
                         ),
                         Text(
-                          DateFormat("yyyy-MM-dd").format(orders["orderdate"].toDate()).toString(),
-                          style: const TextStyle(fontSize: 15, color: Colors.green),
+                          DateFormat("yyyy-MM-dd")
+                              .format(orders["orderdate"].toDate())
+                              .toString(),
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.green),
                         ),
                       ],
                     ),

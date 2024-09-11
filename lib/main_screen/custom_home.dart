@@ -8,9 +8,10 @@ import 'package:multi_store_app/main_screen/profile.dart';
 import 'package:multi_store_app/main_screen/store.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 
 class CustomHomeScreen extends StatefulWidget {
-  const CustomHomeScreen({Key? key}) : super(key: key);
+  const CustomHomeScreen({super.key});
 
   @override
   State<CustomHomeScreen> createState() => _CustomHomeScreenState();
@@ -43,22 +44,29 @@ class _CustomHomeScreenState extends State<CustomHomeScreen> {
             });
           },
           items: [
-            const BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            const BottomNavigationBarItem(icon: Icon(Icons.search), label: "Category"),
-            const BottomNavigationBarItem(icon: Icon(Icons.shop), label: "Store"),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.home), label: "Home"),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.search), label: "Category"),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.shop), label: "Store"),
             BottomNavigationBarItem(
-                icon: Badge(
-                    showBadge: context.watch<Cart>().getItems.isEmpty ? false : true,
-                    padding: const EdgeInsets.all(2),
-                    badgeColor: Colors.yellow,
+                icon: badges.Badge(
+                    showBadge:
+                        context.watch<Cart>().getItems.isEmpty ? false : true,
+                    badgeStyle: const BadgeStyle(
+                      badgeColor: Colors.yellow,
+                    ),
                     badgeContent: Text(
                       context.read<Cart>().getItems.length.toString(),
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w600),
                     ),
-                    animationType: BadgeAnimationType.scale,
+                    badgeAnimation: const BadgeAnimation.scale(),
                     child: const Icon(Icons.shopping_cart)),
                 label: "Cart"),
-            const BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.person), label: "Profil"),
           ]),
     );
   }
